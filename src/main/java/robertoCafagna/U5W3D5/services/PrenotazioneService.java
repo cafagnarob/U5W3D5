@@ -12,6 +12,7 @@ import robertoCafagna.U5W3D5.entities.Prenotazione;
 import robertoCafagna.U5W3D5.entities.User;
 import robertoCafagna.U5W3D5.exceptions.BadRequestException;
 import robertoCafagna.U5W3D5.exceptions.NotFoundException;
+import robertoCafagna.U5W3D5.repositories.EventoRepository;
 import robertoCafagna.U5W3D5.repositories.PrenotazioneRepository;
 
 import java.time.LocalDate;
@@ -23,11 +24,15 @@ public class PrenotazioneService {
     private final PrenotazioneRepository prenotazioneRepository;
     private final UserService userService;
     private final EventoService eventoService;
+    private final EventoRepository eventoRepository;
 
-    public PrenotazioneService(PrenotazioneRepository prenotazioneRepository, UserService userService, EventoService eventoService) {
+    public PrenotazioneService(PrenotazioneRepository prenotazioneRepository,
+                               UserService userService,
+                               EventoService eventoService, EventoRepository eventoRepository) {
         this.prenotazioneRepository = prenotazioneRepository;
         this.userService = userService;
         this.eventoService = eventoService;
+        this.eventoRepository = eventoRepository;
     }
 
 
@@ -44,9 +49,22 @@ public class PrenotazioneService {
                             " è già registrato all'evento"
             );
         }
+
+        if (eFromDB.getDiponibilitaPosti() <= 0) {
+            throw new BadRequestException(
+                    "Non ci sono più posti disponibili"
+            );
+        }
         Prenotazione newPrenotazione = new Prenotazione(dFromDB, eFromDB);
 
+        eFromDB.setDiponibilitaPosti(
+                eFromDB.getDiponibilitaPosti() - 1
+        );
+
+        eventoRepository.save(eFromDB);
+
         Prenotazione saved = this.prenotazioneRepository.save(newPrenotazione);
+
 
         log.info("La risorsa " + saved.getId() + " salvato");
 
