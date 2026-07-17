@@ -7,10 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import robertoCafagna.U5W3D5.DTO.EventoDTO;
+import robertoCafagna.U5W3D5.Enum.Ruolo;
 import robertoCafagna.U5W3D5.entities.Evento;
 import robertoCafagna.U5W3D5.entities.User;
 import robertoCafagna.U5W3D5.exceptions.BadRequestException;
 import robertoCafagna.U5W3D5.exceptions.NotFoundException;
+import robertoCafagna.U5W3D5.exceptions.UnauthorizedException;
 import robertoCafagna.U5W3D5.repositories.EventoRepository;
 import robertoCafagna.U5W3D5.repositories.PrenotazioneRepository;
 
@@ -32,6 +34,10 @@ public class EventoService {
             throw new BadRequestException(
                     "Non è possibile creare un viaggio nel passato"
             );
+        }
+
+        if (!organizzatore.getRuolo().equals(Ruolo.ORGANIZZATORE)) {
+            throw new UnauthorizedException("Solo gli organizzatori possono creare eventi");
         }
 
         if (eventoRepository.existsByLuogoAndData(
@@ -80,6 +86,10 @@ public class EventoService {
             );
         }
 
+        if (!currentUser.getRuolo().equals(Ruolo.ORGANIZZATORE)) {
+            throw new UnauthorizedException("Solo gli organizzatori possono creare eventi");
+        }
+
 
         found.setData(body.data());
         found.setTitolo(body.titolo());
@@ -108,6 +118,10 @@ public class EventoService {
                     "Non puoi eliminare un evento con prenotazioni associate"
             );
         }
+        if (!currentUser.getRuolo().equals(Ruolo.ORGANIZZATORE)) {
+            throw new UnauthorizedException("Solo gli organizzatori possono creare eventi");
+        }
+
         this.eventoRepository.delete(found);
     }
 }

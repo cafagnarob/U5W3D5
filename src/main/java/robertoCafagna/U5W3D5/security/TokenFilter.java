@@ -36,8 +36,7 @@ public class TokenFilter extends OncePerRequestFilter {
 
         this.jwtTools.verifyToken(accessToken);
 
-
-        //1.
+        
         Long userId = this.jwtTools.extractIdFromToken(accessToken);
         User found = this.userService.findById(userId);
 

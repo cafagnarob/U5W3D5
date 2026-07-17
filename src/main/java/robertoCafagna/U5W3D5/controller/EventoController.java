@@ -3,6 +3,7 @@ package robertoCafagna.U5W3D5.controller;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +50,7 @@ public class EventoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('ORGANIZZATORE')")
     public EventoResponseDTO saveEvento(
             @Valid @RequestBody EventoDTO body,
             BindingResult validationResult,
@@ -91,6 +93,7 @@ public class EventoController {
     // --> 200 OK EVENTO AGGIORNATO
 
     @PutMapping("/{eventoId}")
+    @PreAuthorize("hasAnyAuthority('ORGANIZZATORE')")
     public Evento findByIdAndUpdate(
             @PathVariable Long eventoId,
             @Valid @RequestBody EventoDTO body,
@@ -120,6 +123,7 @@ public class EventoController {
     // --> 204 NO CONTENT
 
     @DeleteMapping("/{eventoId}")
+    @PreAuthorize("hasAnyAuthority('ORGANIZZATORE')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void findByIdAndDelete(
             @PathVariable Long eventoId,

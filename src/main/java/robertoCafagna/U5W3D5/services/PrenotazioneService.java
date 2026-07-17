@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import robertoCafagna.U5W3D5.DTO.PrenotazioneDTO;
 import robertoCafagna.U5W3D5.entities.Evento;
 import robertoCafagna.U5W3D5.entities.Prenotazione;
 import robertoCafagna.U5W3D5.entities.User;
@@ -38,13 +37,13 @@ public class PrenotazioneService {
     }
 
 
-    public Prenotazione save(PrenotazioneDTO body) {
-        User dFromDB = this.userService.findById(body.userId());
-        Evento eFromDB = this.eventoService.findById(body.eventoId());
+    public Prenotazione save(Long userId, Long eventoId) {
+        User dFromDB = this.userService.findById(userId);
+        Evento eFromDB = this.eventoService.findById(eventoId);
 
 
         if (prenotazioneRepository.existsByUtente_IdAndEvento_Id(
-                body.userId(), body.eventoId()
+                userId, eventoId
         )) {
             throw new BadRequestException(
                     "l'utente " + dFromDB.getName() + dFromDB.getSurname() +

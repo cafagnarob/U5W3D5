@@ -17,7 +17,7 @@ import robertoCafagna.U5W3D5.services.UserService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
     private final UserService userService;
 
@@ -78,7 +78,7 @@ public class UserController {
 
     // 4. PUT http://localhost:3001/users/{userId} (+payload) --> 200 OK  USER AGGIORNATO
     @PutMapping("/{userId}")
-    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ORGANIZZATORE')")
     public User findByIdAndUpdate(@PathVariable long userId, @Valid @RequestBody UserDTO body, BindingResult validationResult) {
         if (validationResult.hasErrors()) {
             List<String> errorsList = validationResult.getFieldErrors().stream().map(fieldError -> fieldError.getDefaultMessage()).toList();
@@ -89,7 +89,7 @@ public class UserController {
 
     //5.DELETE http://localhost:3001/user/{userId} --> 204 NO CONTENT
     @DeleteMapping("/{userId}")
-    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ORGANIZZATORE')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void findByIdAndDelete(@PathVariable long userId) {
         this.userService.findAndDelete(userId);

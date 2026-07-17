@@ -42,5 +42,6 @@ public class AuthController {
         }
         User saved = this.userService.save(body);
         return new UserResponseDTO(saved.getId());
+
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import robertoCafagna.U5W3D5.DTO.PasswordChangeDTO;
 import robertoCafagna.U5W3D5.DTO.UserDTO;
@@ -19,10 +20,12 @@ import robertoCafagna.U5W3D5.repositories.UserRepository;
 public class UserService {
     private final UserRepository userRepository;
     private final PrenotazioneRepository prenotazioneRepository;
+    private final PasswordEncoder bcrypt;
 
-    public UserService(UserRepository userRepository, PrenotazioneRepository prenotazioneRepository) {
+    public UserService(UserRepository userRepository, PrenotazioneRepository prenotazioneRepository, PasswordEncoder bcrypt) {
         this.userRepository = userRepository;
         this.prenotazioneRepository = prenotazioneRepository;
+        this.bcrypt = bcrypt;
     }
 
     public User save(UserDTO body) {
@@ -32,7 +35,7 @@ public class UserService {
         User newUser = new User(body.name().trim(),
                 body.surname().trim(),
                 body.email().trim().toLowerCase(),
-                body.password());
+                bcrypt.encode(body.password()));
 
         User saved = this.userRepository.save(newUser);
 
@@ -83,7 +86,7 @@ public class UserService {
 
     public void updatePass(long userId, PasswordChangeDTO body) {
         User found = this.findById(userId);
-        if (!found.getPassword().equals(body.oldPassword()))
+        if (!this.bcrypt.matches(body.oldPassword(), found.getPassword()))
             throw new BadRequestException("Le password non corrispondono!");
         found.setPassword(body.newPassword());
         this.userRepository.save(found);
