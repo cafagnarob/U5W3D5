@@ -17,9 +17,8 @@ public record EventoDTO(
         @NotBlank(message = "inserire un luogo valido")
         @Size(min = 2, max = 40, message = "il luogo deve avere un numero di caratteri compreso tra 2 e 40")
         String luogo,
-        @NotNull(message = "inserire un numero di posti valido")
-        @Positive
-        @Min(1)
+        @Positive(message = "i posti devono essere maggiori di 1")
+        @Min(value = 1, message = "inserire un numero maggiore di 1")
         int disponibilitaPosti
 ) {
 
