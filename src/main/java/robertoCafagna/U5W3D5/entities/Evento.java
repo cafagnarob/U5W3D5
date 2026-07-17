@@ -32,7 +32,6 @@ public class Evento {
     @Setter
     @Column(nullable = false)
     private int diponibilitaPosti;
-
     @ManyToOne
     @JoinColumn(name = "organizzatore_id")
     private User organizzatore;
