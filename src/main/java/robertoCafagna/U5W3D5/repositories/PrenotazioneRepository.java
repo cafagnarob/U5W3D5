@@ -10,9 +10,13 @@ import java.util.List;
 public interface PrenotazioneRepository extends JpaRepository<Prenotazione, Long> {
     boolean existsByUtenteIdAndEventoId(Long userId, Long eventoId);
 
+    boolean existsByUtenteIdAndEventoIdAndIdNot(Long userId, Long eventoId);
+
     List<Prenotazione> findByUtenteId(Long id);
 
     void deleteByUtenteIdAndEventoId(Long userId, Long eventoId);
 
     boolean existsByEventoId(Long eventoid);
+
+    List<Prenotazione> getByUserId(Long userId);
 }
