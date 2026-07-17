@@ -42,7 +42,7 @@ public class PrenotazioneController {
         return this.prenotazioneService.findByUserId(authUser.getId());
     }
 
-    // 3. POST http://localhost:3001/prenotazioni (+req.body) --> 201 CREATED
+    // 3. POST http://localhost:3001/prenotazioni/me (+req.body) --> 201 CREATED
     // L'utente autenticato crea una prenotazione per sé stesso
     @PostMapping("/me")
     @ResponseStatus(HttpStatus.CREATED)
