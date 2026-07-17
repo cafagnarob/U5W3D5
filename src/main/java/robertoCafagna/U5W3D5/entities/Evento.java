@@ -21,7 +21,7 @@ public class Evento {
     @Column(nullable = false)
     private String titolo;
     @Setter
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String descrizione;
     @Setter
     @Column(nullable = false)
@@ -33,14 +33,19 @@ public class Evento {
     @Column(nullable = false)
     private int diponibilitaPosti;
 
+    @ManyToOne
+    @JoinColumn(name = "organizzatore_id")
+    private User organizzatore;
+
 
     public Evento(String titolo, String descrizione, LocalDate data,
-                  String luogo, int diponibilitaPosti) {
+                  String luogo, int diponibilitaPosti, User organizzatore) {
         this.titolo = titolo;
         this.descrizione = descrizione;
         this.data = data;
         this.luogo = luogo;
         this.diponibilitaPosti = diponibilitaPosti;
+        this.organizzatore = organizzatore;
     }
 
 }
