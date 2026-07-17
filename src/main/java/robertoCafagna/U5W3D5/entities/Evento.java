@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public class Evento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Setter
     @Column(nullable = false)
@@ -31,19 +31,19 @@ public class Evento {
     private String luogo;
     @Setter
     @Column(nullable = false)
-    private int diponibilitaPosti;
+    private int disponibilitaPosti;
     @ManyToOne
     @JoinColumn(name = "organizzatore_id")
     private User organizzatore;
 
 
     public Evento(String titolo, String descrizione, LocalDate data,
-                  String luogo, int diponibilitaPosti, User organizzatore) {
+                  String luogo, int disponibilitaPosti, User organizzatore) {
         this.titolo = titolo;
         this.descrizione = descrizione;
         this.data = data;
         this.luogo = luogo;
-        this.diponibilitaPosti = diponibilitaPosti;
+        this.disponibilitaPosti = disponibilitaPosti;
         this.organizzatore = organizzatore;
     }
 

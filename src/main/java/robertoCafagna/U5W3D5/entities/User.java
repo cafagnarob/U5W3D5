@@ -6,7 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import robertoCafagna.U5W3D5.Enum.Ruolo;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
@@ -14,10 +20,10 @@ import robertoCafagna.U5W3D5.Enum.Ruolo;
 @ToString
 @Table(name = "users")
 @JsonIgnoreProperties({"password"})
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Setter
     @Column(nullable = false)
@@ -44,5 +50,15 @@ public class User {
         this.email = email;
         this.password = password;
         this.ruolo = Ruolo.USER;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(this.ruolo.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
     }
 }

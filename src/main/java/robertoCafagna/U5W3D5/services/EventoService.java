@@ -69,8 +69,16 @@ public class EventoService {
         return this.eventoRepository.findById(eventoId).orElseThrow(() -> new NotFoundException(eventoId));
     }
 
-    public Evento findByIdAndUpdate(Long eventoId, EventoDTO body) {
+    public Evento findByIdAndUpdate(Long eventoId, EventoDTO body, User currentUser) {
         Evento found = this.findById(eventoId);
+
+        if (!found.getOrganizzatore().getId()
+                .equals(currentUser.getId())) {
+
+            throw new BadRequestException(
+                    "Non puoi modificare un evento che non hai creato"
+            );
+        }
 
 
         found.setData(body.data());
@@ -86,8 +94,15 @@ public class EventoService {
     }
 
 
-    public void findByIdAndDelete(Long eventoId) {
+    public void findByIdAndDelete(Long eventoId, EventoDTO body, User currentUser) {
         Evento found = this.findById(eventoId);
+        if (!found.getOrganizzatore().getId()
+                .equals(currentUser.getId())) {
+
+            throw new BadRequestException(
+                    "Non puoi eliminare un evento che non hai creato"
+            );
+        }
         if (prenotazioneRepository.existsByEvento_Id(eventoId)) {
             throw new BadRequestException(
                     "Non puoi eliminare un evento con prenotazioni associate"
