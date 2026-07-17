@@ -13,4 +13,6 @@ public interface PrenotazioneRepository extends JpaRepository<Prenotazione, Long
     List<Prenotazione> findByUtenteId(Long id);
 
     void deleteByUtenteIdAndEventoId(Long userId, Long eventoId);
+
+    boolean existsByEventoId(Long eventoid);
 }
