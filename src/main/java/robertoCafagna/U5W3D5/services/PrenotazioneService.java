@@ -19,12 +19,12 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class PrenotazioniService {
+public class PrenotazioneService {
     private final PrenotazioneRepository prenotazioneRepository;
     private final UserService userService;
     private final EventoService eventoService;
 
-    public PrenotazioniService(PrenotazioneRepository prenotazioneRepository, UserService userService, EventoService eventoService) {
+    public PrenotazioneService(PrenotazioneRepository prenotazioneRepository, UserService userService, EventoService eventoService) {
         this.prenotazioneRepository = prenotazioneRepository;
         this.userService = userService;
         this.eventoService = eventoService;
@@ -36,7 +36,7 @@ public class PrenotazioniService {
         Evento eFromDB = this.eventoService.findById(body.eventoId());
 
 
-        if (prenotazioneRepository.existsByUtenteIdAndEventoId(
+        if (prenotazioneRepository.existsByUtente_IdAndEvento_Id(
                 body.userId(), body.eventoId()
         )) {
             throw new BadRequestException(
@@ -81,7 +81,7 @@ public class PrenotazioniService {
 
 
     public List<Prenotazione> findByUserId(Long userId) {
-        List<Prenotazione> found = this.prenotazioneRepository.getByUserId(userId);
+        List<Prenotazione> found = this.prenotazioneRepository.findByUtente_Id(userId);
         if (found.isEmpty()) {
             throw new NotFoundException(userId);
         }
@@ -94,5 +94,16 @@ public class PrenotazioniService {
         List<Prenotazione> found = this.findByUserId(userId);
         found.forEach(prenotazioneRepository::delete);
         log.info("tutte le prenotazioni dell'Utente " + userId + "sono stati eliminati");
+    }
+
+
+    public void deleteEventoEUser(Long userId, Long eventoId) {
+        if (!prenotazioneRepository.existsByUtente_IdAndEvento_Id(userId, eventoId)) {
+            throw new NotFoundException(
+                    "Non esiste una prenotazione per questo utente e questo evento"
+            );
+        }
+
+        prenotazioneRepository.deleteByUtente_IdAndEvento_Id(userId, eventoId);
     }
 }

@@ -88,7 +88,7 @@ public class EventoService {
 
     public void findByIdAndDelete(Long eventoId) {
         Evento found = this.findById(eventoId);
-        if (prenotazioneRepository.existsByEventoId(eventoId)) {
+        if (prenotazioneRepository.existsByEvento_Id(eventoId)) {
             throw new BadRequestException(
                     "Non puoi eliminare un evento con prenotazioni associate"
             );
