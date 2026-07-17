@@ -10,8 +10,6 @@ import java.util.List;
 public interface PrenotazioneRepository extends JpaRepository<Prenotazione, Long> {
     boolean existsByUtente_IdAndEvento_Id(Long userId, Long eventoId);
 
-    ;
-
     List<Prenotazione> findByUtente_Id(Long id);
 
     boolean existsByUtente_Id(Long id);

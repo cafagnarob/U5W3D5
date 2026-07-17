@@ -17,7 +17,7 @@ import robertoCafagna.U5W3D5.Enum.Ruolo;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Setter
     @Column(nullable = false)

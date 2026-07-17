@@ -1,11 +1,13 @@
 package robertoCafagna.U5W3D5.services;
 
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import robertoCafagna.U5W3D5.DTO.PrenotazioneDTO;
 import robertoCafagna.U5W3D5.entities.Evento;
 import robertoCafagna.U5W3D5.entities.Prenotazione;
@@ -84,6 +86,7 @@ public class PrenotazioneService {
                 new NotFoundException(prenotazioneId));
     }
 
+    @Transactional
     public void findByIdAndDelete(Long prenotazioneId) {
         Prenotazione found = this.findById(prenotazioneId);
 
@@ -94,6 +97,12 @@ public class PrenotazioneService {
                     "Non puoi eliminare una prenotazione per un viaggio già passato"
             );
         }
+
+        Evento evento = found.getEvento();
+        evento.setDiponibilitaPosti(evento.getDiponibilitaPosti() + 1);
+        eventoRepository.save(evento);
+
+
         this.prenotazioneRepository.delete(found);
     }
 
@@ -107,20 +116,29 @@ public class PrenotazioneService {
         return found;
     }
 
-
+    @Transactional
     public void findByUserIdAndDelete(Long userId) {
         List<Prenotazione> found = this.findByUserId(userId);
-        found.forEach(prenotazioneRepository::delete);
+        found.forEach(p -> {
+            Evento evento = p.getEvento();
+            evento.setDiponibilitaPosti(evento.getDiponibilitaPosti() + 1);
+            eventoRepository.save(evento);
+            prenotazioneRepository.delete(p);
+        });
         log.info("tutte le prenotazioni dell'Utente " + userId + "sono stati eliminati");
     }
 
-
+    @Transactional
     public void deleteEventoEUser(Long userId, Long eventoId) {
         if (!prenotazioneRepository.existsByUtente_IdAndEvento_Id(userId, eventoId)) {
             throw new NotFoundException(
                     "Non esiste una prenotazione per questo utente e questo evento"
             );
         }
+
+        Evento evento = eventoService.findById(eventoId);
+        evento.setDiponibilitaPosti(evento.getDiponibilitaPosti() + 1);
+        eventoRepository.save(evento);
 
         prenotazioneRepository.deleteByUtente_IdAndEvento_Id(userId, eventoId);
     }
