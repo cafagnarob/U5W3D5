@@ -12,6 +12,7 @@ import robertoCafagna.U5W3D5.Enum.Ruolo;
 @Getter
 @NoArgsConstructor
 @ToString
+@Table(name = "users")
 @JsonIgnoreProperties({"password"})
 public class User {
     @Id
