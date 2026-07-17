@@ -94,7 +94,7 @@ public class EventoService {
     }
 
 
-    public void findByIdAndDelete(Long eventoId, EventoDTO body, User currentUser) {
+    public void findByIdAndDelete(Long eventoId, User currentUser) {
         Evento found = this.findById(eventoId);
         if (!found.getOrganizzatore().getId()
                 .equals(currentUser.getId())) {
