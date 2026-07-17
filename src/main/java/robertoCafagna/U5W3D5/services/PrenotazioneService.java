@@ -52,15 +52,15 @@ public class PrenotazioneService {
             );
         }
 
-        if (eFromDB.getDiponibilitaPosti() <= 0) {
+        if (eFromDB.getDisponibilitaPosti() <= 0) {
             throw new BadRequestException(
                     "Non ci sono più posti disponibili"
             );
         }
         Prenotazione newPrenotazione = new Prenotazione(dFromDB, eFromDB);
 
-        eFromDB.setDiponibilitaPosti(
-                eFromDB.getDiponibilitaPosti() - 1
+        eFromDB.setDisponibilitaPosti(
+                eFromDB.getDisponibilitaPosti() - 1
         );
 
         eventoRepository.save(eFromDB);
@@ -99,7 +99,7 @@ public class PrenotazioneService {
         }
 
         Evento evento = found.getEvento();
-        evento.setDiponibilitaPosti(evento.getDiponibilitaPosti() + 1);
+        evento.setDisponibilitaPosti(evento.getDisponibilitaPosti() + 1);
         eventoRepository.save(evento);
 
 
@@ -121,7 +121,7 @@ public class PrenotazioneService {
         List<Prenotazione> found = this.findByUserId(userId);
         found.forEach(p -> {
             Evento evento = p.getEvento();
-            evento.setDiponibilitaPosti(evento.getDiponibilitaPosti() + 1);
+            evento.setDisponibilitaPosti(evento.getDisponibilitaPosti() + 1);
             eventoRepository.save(evento);
             prenotazioneRepository.delete(p);
         });
@@ -137,7 +137,7 @@ public class PrenotazioneService {
         }
 
         Evento evento = eventoService.findById(eventoId);
-        evento.setDiponibilitaPosti(evento.getDiponibilitaPosti() + 1);
+        evento.setDisponibilitaPosti(evento.getDisponibilitaPosti() + 1);
         eventoRepository.save(evento);
 
         prenotazioneRepository.deleteByUtente_IdAndEvento_Id(userId, eventoId);

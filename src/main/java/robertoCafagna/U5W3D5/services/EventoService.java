@@ -85,7 +85,7 @@ public class EventoService {
         found.setTitolo(body.titolo());
         found.setDescrizione(body.descrizione());
         found.setLuogo(body.luogo());
-        found.setDiponibilitaPosti(body.disponibilitaPosti());
+        found.setDisponibilitaPosti(body.disponibilitaPosti());
 
 
         Evento updateEvento = this.eventoRepository.save(found);
