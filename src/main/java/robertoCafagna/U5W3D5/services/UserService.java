@@ -1,9 +1,11 @@
 package robertoCafagna.U5W3D5.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 import robertoCafagna.U5W3D5.DTO.PasswordChangeDTO;
 import robertoCafagna.U5W3D5.DTO.UserDTO;
 import robertoCafagna.U5W3D5.entities.User;
@@ -12,6 +14,8 @@ import robertoCafagna.U5W3D5.exceptions.NotFoundException;
 import robertoCafagna.U5W3D5.repositories.PrenotazioneRepository;
 import robertoCafagna.U5W3D5.repositories.UserRepository;
 
+@Service
+@Slf4j
 public class UserService {
     private final UserRepository userRepository;
     private final PrenotazioneRepository prenotazioneRepository;
