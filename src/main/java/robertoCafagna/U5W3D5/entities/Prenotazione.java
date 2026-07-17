@@ -26,10 +26,10 @@ public class Prenotazione {
     @Column(nullable = false)
     private LocalDate dataPrenotazione;
 
-    public Prenotazione(User utente, Evento evento, LocalDate dataPrenotazione) {
+    public Prenotazione(User utente, Evento evento) {
         this.utente = utente;
         this.evento = evento;
-        this.dataPrenotazione = dataPrenotazione;
+        this.dataPrenotazione = LocalDate.now();
     }
 
 }
