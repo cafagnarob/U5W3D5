@@ -69,11 +69,11 @@ public class EventoService {
         return this.eventoRepository.findById(eventoId).orElseThrow(() -> new NotFoundException(eventoId));
     }
 
-    public Evento findByIdAndUpdate(Long eventoId, EventoDTO body) {
+    public Evento findByIdAndUpdate(Long eventoId, EventoDTO body, User currentUser) {
         Evento found = this.findById(eventoId);
 
         if (!found.getOrganizzatore().getId()
-                .equals(organizzatore.getId())) {
+                .equals(currentUser.getId())) {
 
             throw new BadRequestException(
                     "Non puoi modificare un evento che non hai creato"
