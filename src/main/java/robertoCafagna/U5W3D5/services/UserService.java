@@ -69,7 +69,7 @@ public class UserService {
 
     public void findAndDelete(Long userId) {
         User found = this.findById(userId);
-        if (prenotazioneRepository.findByUtenteId(userId) != null) {
+        if (prenotazioneRepository.existsByUtente_Id(userId)) {
             throw new BadRequestException(
                     "Non puoi eliminare un utente con prenotazioni associate"
             );

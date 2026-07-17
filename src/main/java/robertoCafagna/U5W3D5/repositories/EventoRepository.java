@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface EventoRepository extends JpaRepository<Evento, Long> {
-    List<Evento> findByOrganizzatoreId(Long id);
+    List<Evento> findByOrganizzatore_Id(Long id);
 
     boolean existsByLuogoAndData(String luogo, LocalDate data);
 }
